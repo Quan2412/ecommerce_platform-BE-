@@ -60,7 +60,7 @@ public class User {
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    Set<UserAddress> addresses = new HashSet<>();
+    Set<Address> addresses = new HashSet<>();
 
     public enum  UserRole{
         Guest, User, Seller, Admin
@@ -70,7 +70,7 @@ public class User {
     }
 
 
-    public User(Integer userId, String username, String password, String email, String firstName, String lastName, String phoneNumber, UserRole userRole, LocalDateTime createdAt, Set<UserAddress> addresses) {
+    public User(Integer userId, String username, String password, String email, String firstName, String lastName, String phoneNumber, UserRole userRole, LocalDateTime createdAt, Set<Address> addresses) {
         this.userId = userId;
         this.username = username;
         this.password = password;
@@ -214,21 +214,21 @@ public class User {
      * @return Set<Address> return the addresses
      */
 
-     public Set<UserAddress> getAddresses() {
+     public Set<Address> getAddresses() {
         return addresses;
     }
 
-    public void setAddresses(Set<UserAddress> addresses) {
+    public void setAddresses(Set<Address> addresses) {
         this.addresses = addresses;
     }
 
     // Helper methods for managing bidirectional relationship
-    public void addAddress(UserAddress address) {
+    public void addAddress(Address address) {
         addresses.add(address);
         address.setUser(this);
     }
 
-    public void removeAddress(UserAddress address) {
+    public void removeAddress(Address address) {
         addresses.remove(address);
         address.setUser(null);
     }

@@ -1,6 +1,5 @@
 package com.ecommerce.demo.model;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
@@ -14,7 +13,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "Address")
-public class UserAddress implements Serializable {
+public class Address {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
@@ -45,7 +44,8 @@ public class UserAddress implements Serializable {
     private Boolean isDefault = false;
 
 
-    public UserAddress() {
+    public Address() {
+        /*Empty construcotr */
     }
     
 
@@ -180,7 +180,7 @@ public class UserAddress implements Serializable {
      public boolean equals(Object o) {
          if (this == o) return true;
          if (o == null || getClass() != o.getClass()) return false;
-         UserAddress address = (UserAddress) o;
+         Address address = (Address) o;
          return Objects.equals(id, address.id);
      }
  
