@@ -1,7 +1,6 @@
-package com.ecommerce.demo.model;
+package com.ecommerce.demo.entity;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,18 +8,18 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Data;
 
+@Data
 @Entity
-@Table(name = "Reviews")
+@Table(name = "Review")
 public class Review {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ReviewID")
-    private Integer reviewId;
+    private Long reviewId;
 
     @ManyToOne
     @JoinColumn(name = "ProductID", nullable = false)
@@ -33,35 +32,34 @@ public class Review {
     @Column(name = "Rating", nullable = false)
     private Integer rating;
 
-    @Lob
     @Column(name = "Comment")
     private String comment;
 
     @Column(name = "ReviewDate")
     private LocalDateTime reviewDate;
 
-    // Constructors
-    public Review() {}
+    public Review() {
+    }
 
-    public Review(Product product, User user, Integer rating, String comment) {
+    public Review(Long reviewId, Product product, User user, Integer rating, String comment, LocalDateTime reviewDate) {
+        this.reviewId = reviewId;
         this.product = product;
         this.user = user;
         this.rating = rating;
         this.comment = comment;
-        this.reviewDate = LocalDateTime.now();
+        this.reviewDate = reviewDate;
     }
 
-    // Getters and Setters
-    public Integer getReviewId() {
-        return reviewId;
+    public Long getReviewId() {
+        return this.reviewId;
     }
 
-    public void setReviewId(Integer reviewId) {
+    public void setReviewId(Long reviewId) {
         this.reviewId = reviewId;
     }
 
     public Product getProduct() {
-        return product;
+        return this.product;
     }
 
     public void setProduct(Product product) {
@@ -69,7 +67,7 @@ public class Review {
     }
 
     public User getUser() {
-        return user;
+        return this.user;
     }
 
     public void setUser(User user) {
@@ -77,7 +75,7 @@ public class Review {
     }
 
     public Integer getRating() {
-        return rating;
+        return this.rating;
     }
 
     public void setRating(Integer rating) {
@@ -85,7 +83,7 @@ public class Review {
     }
 
     public String getComment() {
-        return comment;
+        return this.comment;
     }
 
     public void setComment(String comment) {
@@ -93,33 +91,11 @@ public class Review {
     }
 
     public LocalDateTime getReviewDate() {
-        return reviewDate;
+        return this.reviewDate;
     }
 
     public void setReviewDate(LocalDateTime reviewDate) {
         this.reviewDate = reviewDate;
     }
 
-    // equals, hashCode, and toString methods
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Review)) return false;
-        Review review = (Review) o;
-        return Objects.equals(getReviewId(), review.getReviewId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getReviewId());
-    }
-
-    @Override
-    public String toString() {
-        return "Review{" +
-                "reviewId=" + reviewId +
-                ", rating=" + rating +
-                ", reviewDate=" + reviewDate +
-                '}';
-    }
 }

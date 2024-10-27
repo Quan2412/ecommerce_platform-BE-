@@ -1,4 +1,4 @@
-package com.ecommerce.demo.model;
+package com.ecommerce.demo.entity;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,8 +15,8 @@ import jakarta.persistence.Table;
 
 
 @Entity
-@Table(name = "Categories")
-public class Categories {
+@Table(name = "Category")
+public class Category {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer categoriesId;
@@ -26,20 +26,20 @@ public class Categories {
 
     @ManyToOne
     @JoinColumn(name = "ParentCategoryID")
-    private Categories parentCategory;
+    private Category parentCategory;
 
     @OneToMany(mappedBy = "parentCategory")
-    Set<Categories> subCategories = new HashSet<>();
+    Set<Category> subCategories = new HashSet<>();
 
     @OneToMany(mappedBy = "category")
     Set<Product> products = new HashSet<>();
 
 
-    public Categories() {
+    public Category() {
     }
     
 
-    public Categories(Integer categoriesId, String categoryName, Categories parentCategory, Set<Categories> subCategories, Set<Product> products) {
+    public Category(Integer categoriesId, String categoryName, Category parentCategory, Set<Category> subCategories, Set<Product> products) {
         this.categoriesId = categoriesId;
         this.categoryName = categoryName;
         this.parentCategory = parentCategory;
@@ -80,28 +80,28 @@ public class Categories {
     /**
      * @return Category return the parentCategory
      */
-    public Categories getParentCategory() {
+    public Category getParentCategory() {
         return parentCategory;
     }
 
     /**
      * @param parentCategory the parentCategory to set
      */
-    public void setParentCategory(Categories parentCategory) {
+    public void setParentCategory(Category parentCategory) {
         this.parentCategory = parentCategory;
     }
 
     /**
      * @return Set<Category> return the subCategories
      */
-    public Set<Categories> getSubCategories() {
+    public Set<Category> getSubCategories() {
         return subCategories;
     }
 
     /**
      * @param subCategories the subCategories to set
      */
-    public void setSubCategories(Set<Categories> subCategories) {
+    public void setSubCategories(Set<Category> subCategories) {
         this.subCategories = subCategories;
     }
 
