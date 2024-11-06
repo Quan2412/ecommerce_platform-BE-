@@ -2,19 +2,26 @@ package com.ecommerce.demo.controller;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.ecommerce.demo.dto.LoginRequest;
+import com.ecommerce.demo.dto.RegisterRequest;
 import com.ecommerce.demo.entity.User;
 import com.ecommerce.demo.entity.UserRole;
-import com.ecommerce.demo.dto.RegisterRequest;
 import com.ecommerce.demo.service.UserService;
-import lombok.Data;
 
 @RestController
-@RequestMapping("/api/auth")  // Changed from /usercontroller to follow REST conventions
+@RequestMapping("/api/auth")  
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class UserController {
 
     private final UserService userService;
@@ -66,10 +73,4 @@ public class UserController {
         }
     }
 
-    @Data
-    private static class LoginRequest {
-
-        private String username;
-        private String password;
-    }
 }

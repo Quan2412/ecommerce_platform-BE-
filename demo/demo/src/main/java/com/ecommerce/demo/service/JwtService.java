@@ -13,7 +13,7 @@ import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtService {
-    private static final String SECRET_KEY = "your_secret_key_here_make_it_at_least_256_bits";
+    private static final String SECRET_KEY = "Secret key";
     private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 24; // 24 hours
 
     public String generateToken(String username) {
