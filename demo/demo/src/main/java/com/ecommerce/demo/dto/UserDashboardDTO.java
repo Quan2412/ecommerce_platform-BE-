@@ -5,10 +5,21 @@ import lombok.Data;
 @Data
 public class UserDashboardDTO {
     private String username;
-    private int totalPurchases;
+    private long totalPurchases;  // Changed to long for COUNT result
     private String mostBoughtProduct;
     private String mostSoldProduct;
     private double totalRevenue;
+
+    // Add this constructor
+    public UserDashboardDTO(String username, long totalPurchases, 
+                          String mostBoughtProduct, String mostSoldProduct, 
+                          double totalRevenue) {
+        this.username = username;
+        this.totalPurchases = totalPurchases;
+        this.mostBoughtProduct = mostBoughtProduct;
+        this.mostSoldProduct = mostSoldProduct;
+        this.totalRevenue = totalRevenue;
+    }
 
     public String getUsername() {
         return this.username;
@@ -18,11 +29,11 @@ public class UserDashboardDTO {
         this.username = username;
     }
 
-    public int getTotalPurchases() {
+    public long getTotalPurchases() {
         return this.totalPurchases;
     }
 
-    public void setTotalPurchases(int totalPurchases) {
+    public void setTotalPurchases(long totalPurchases) {
         this.totalPurchases = totalPurchases;
     }
 
@@ -49,5 +60,5 @@ public class UserDashboardDTO {
     public void setTotalRevenue(double totalRevenue) {
         this.totalRevenue = totalRevenue;
     }
-    
+
 }

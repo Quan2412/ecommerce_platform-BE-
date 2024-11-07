@@ -33,16 +33,30 @@ public class User {
     private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
+    private Provider provider = Provider.LOCAL; // Default to LOCAL
+
+    @Column
+    private String providerId;  // ID from social provider (Google or Facebook)
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserRole userRole;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    // Default constructor
     public User() {
+        this.createdAt = LocalDateTime.now();
+        this.userRole = UserRole.USER;
     }
 
-    public User(int userId, String username, String password, String email, String firstName, String lastName, String phoneNumber, UserRole userRole, LocalDateTime createdAt) {
+    // Full constructor
+    public User(int userId, String username, String password, String email, 
+                String firstName, String lastName, String phoneNumber, 
+                Provider provider, String providerId, UserRole userRole, 
+                LocalDateTime createdAt) {
         this.userId = userId;
         this.username = username;
         this.password = password;
@@ -50,8 +64,10 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
+        this.provider = provider;
+        this.providerId = providerId;
         this.userRole = userRole;
-        this.createdAt = createdAt;
+        this.createdAt = createdAt != null ? createdAt : LocalDateTime.now();
     }
 
     public int getUserId() {
@@ -110,6 +126,22 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
+    public Provider getProvider() {
+        return this.provider;
+    }
+
+    public void setProvider(Provider provider) {
+        this.provider = provider;
+    }
+
+    public String getProviderId() {
+        return this.providerId;
+    }
+
+    public void setProviderId(String providerId) {
+        this.providerId = providerId;
+    }
+
     public UserRole getUserRole() {
         return this.userRole;
     }
@@ -126,4 +158,4 @@ public class User {
         this.createdAt = createdAt;
     }
 
-}
+    }

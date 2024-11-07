@@ -1,6 +1,5 @@
 package com.ecommerce.demo.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ecommerce.demo.dto.UserDashboardDTO;
 import com.ecommerce.demo.service.DashboardService;
 
 import lombok.RequiredArgsConstructor;
@@ -32,16 +30,5 @@ public class DashboardController {
         }
     }
 
-    @GetMapping("/users")
-    public ResponseEntity<List<UserDashboardDTO>> getUserStats() {
-        try {
-            List<UserDashboardDTO> userStats = 
-                dashboardService.getUserDashboardStats();
-            return ResponseEntity.ok(userStats);
-        } catch (Exception e) {
-            return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(null);
-        }
-    }
+    
 }
