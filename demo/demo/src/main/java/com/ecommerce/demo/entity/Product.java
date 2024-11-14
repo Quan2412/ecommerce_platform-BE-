@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -52,10 +53,28 @@ public class Product {
     @JoinColumn(name = "UserID")
     private User user;
 
+    //fields for image handling
+    @Column(name = "ImageUrl", length = 500)
+    private String imageUrl;
+
+    @Column(name = "ImagePublicId", length = 200)
+    private String imagePublicId;
+
+    @Column(name = "ThumbnailUrl", length = 500)
+    private String thumbnailUrl;
+
+    @PrePersist
+    protected void onCreate() {
+        if (createdAt == null) {
+            createdAt = LocalDateTime.now();
+        }
+    }
+
+
     public Product() {
     }
 
-    public Product(Long productId, Shop shop, String productName, String description, Double price, Integer stockQuantity, Category category, String productType, LocalDateTime createdAt, User user) {
+    public Product(Long productId, Shop shop, String productName, String description, Double price, Integer stockQuantity, Category category, String productType, LocalDateTime createdAt, User user, String imageUrl, String imagePublicId, String thumbnailUrl) {
         this.productId = productId;
         this.shop = shop;
         this.productName = productName;
@@ -66,6 +85,9 @@ public class Product {
         this.productType = productType;
         this.createdAt = createdAt;
         this.user = user;
+        this.imageUrl = imageUrl;
+        this.imagePublicId = imagePublicId;
+        this.thumbnailUrl = thumbnailUrl;
     }
 
     public Long getProductId() {
@@ -148,4 +170,29 @@ public class Product {
         this.user = user;
     }
 
+    public String getImageUrl() {
+        return this.imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getImagePublicId() {
+        return this.imagePublicId;
+    }
+
+    public void setImagePublicId(String imagePublicId) {
+        this.imagePublicId = imagePublicId;
+    }
+
+    public String getThumbnailUrl() {
+        return this.thumbnailUrl;
+    }
+
+    public void setThumbnailUrl(String thumbnailUrl) {
+        this.thumbnailUrl = thumbnailUrl;
+    }
+
+    
 }

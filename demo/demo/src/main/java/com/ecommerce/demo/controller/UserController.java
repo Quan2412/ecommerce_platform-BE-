@@ -69,55 +69,55 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
-            Optional<User> user = userService.login(loginRequest.getUsername(), loginRequest.getPassword());
-            if (user.isPresent()) {
-                return ResponseEntity.ok(user.get());
+            Optional<User> userOpt = userService.login(loginRequest.getUsername(), loginRequest.getPassword());
+            if (userOpt.isPresent()) {
+                User user = userOpt.get();
+                String token = jwtService.generateToken(user);
+                
+                Map<String, Object> response = new HashMap<>();
+                response.put("token", token);
+                response.put("user", convertToDTO(user));
+                
+                return ResponseEntity.ok(response);
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body("Invalid username or password");
+                        .body(Collections.singletonMap("message", "Invalid username or password"));
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Login error: " + e.getMessage());
+                    .body(Collections.singletonMap("message", "Login error: " + e.getMessage()));
         }
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         try {
-            // Check if username exists
             if (userService.existsByUsername(request.getUsername())) {
                 return ResponseEntity.badRequest()
                         .body(Collections.singletonMap("message", "Email này đã được sử dụng"));
             }
 
-            // Check if email exists (if you want to check both)
-            if (userService.existsByUsername(request.getEmail())) {
-                return ResponseEntity.badRequest()
-                        .body(Collections.singletonMap("message", "Email này đã được sử dụng"));
-            }
-
-            // Create new user
             User user = new User();
             user.setUsername(request.getUsername());
             user.setEmail(request.getEmail());
             user.setPassword(passwordEncoder.encode(request.getPassword()));
+            user.setProvider(Provider.LOCAL);
 
             User savedUser = userService.save(user);
+            String token = jwtService.generateToken(savedUser);
 
-            // Return success response
             Map<String, Object> response = new HashMap<>();
             response.put("message", "Đăng ký thành công!");
-            response.put("userId", savedUser.getUserId());
+            response.put("token", token);
+            response.put("user", convertToDTO(savedUser));
 
             return ResponseEntity.ok(response);
-
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Collections.singletonMap("message", "Đã xảy ra lỗi khi đăng ký: " + e.getMessage()));
+                    .body(Collections.singletonMap("message", "Registration error: " + e.getMessage()));
         }
     }
+
 
     @PostMapping("/google-login")
     public ResponseEntity<?> googleLogin(@RequestBody GoogleLoginRequest request) {
@@ -145,7 +145,7 @@ public class UserController {
                     payload.getSubject()
             );
 
-            String token = jwtService.generateToken(user.getFirstName());
+            String token = jwtService.generateToken(user);
 
             Map<String, Object> response = new HashMap<>();
             response.put("token", token);
@@ -180,7 +180,7 @@ public class UserController {
             );
 
             // Generate JWT token
-            String token = jwtService.generateToken(user.getFirstName());
+            String token = jwtService.generateToken(user);
 
             Map<String, Object> response = new HashMap<>();
             response.put("token", token);
