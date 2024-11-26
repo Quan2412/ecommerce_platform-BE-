@@ -6,6 +6,7 @@ com\ecommerce\demo\dto\UserStatDTO.class
 com\ecommerce\demo\entity\CommonEnums$OrderStatus.class
 com\ecommerce\demo\controller\ProductController.class
 com\ecommerce\demo\controller\DashboardController.class
+com\ecommerce\demo\dto\UserUpdateDTO.class
 com\ecommerce\demo\security\JwtAuthFilter.class
 com\ecommerce\demo\entity\Currency.class
 com\ecommerce\demo\config\GoogleConfig.class
@@ -45,6 +46,7 @@ com\ecommerce\demo\entity\Refund.class
 com\ecommerce\demo\repository\ProductRepository.class
 com\ecommerce\demo\dto\RegisterRequest.class
 com\ecommerce\demo\config\AppConfig.class
+com\ecommerce\demo\dto\UserProfileDTO.class
 com\ecommerce\demo\controller\UserController.class
 com\ecommerce\demo\entity\CommonEnums$PaymentStatus.class
 com\ecommerce\demo\entity\Review.class

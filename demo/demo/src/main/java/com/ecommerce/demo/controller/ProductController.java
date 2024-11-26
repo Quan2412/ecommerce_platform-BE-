@@ -27,7 +27,7 @@ public class ProductController {
     private final ProductService productService;
     private final CloudinaryService cloudinaryService;
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<Product> createProduct(
             @RequestParam("product") Product product,
             @RequestParam(value = "image", required = false) MultipartFile image) {

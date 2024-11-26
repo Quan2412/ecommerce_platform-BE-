@@ -12,6 +12,7 @@ import com.ecommerce.demo.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
+    
 
     @Query("SELECT u FROM User u WHERE u.username = :username")
     Optional<User> findByUsername(@Param("username") String username);
@@ -24,7 +25,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query("SELECT CASE WHEN COUNT(u) > 0 THEN true ELSE false END FROM User u WHERE u.email = :email")
     boolean existsByEmail(@Param("email") String email);
-
+    @Query("""
+        SELECT u FROM User u 
+        WHERE u.email = :email AND u.userId != :userId
+    """)
+    Optional<User> findByEmailAndIdNot(@Param("email") String email, @Param("userId") Integer userId);
 
     @Query(value = """
         SELECT u.user_id as userId, u.username, 

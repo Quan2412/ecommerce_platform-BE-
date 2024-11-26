@@ -4,10 +4,14 @@ import java.util.Optional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.ecommerce.demo.dto.UserProfileDTO;
+import com.ecommerce.demo.dto.UserUpdateDTO;
 import com.ecommerce.demo.entity.Provider;
 import com.ecommerce.demo.entity.User;
 import com.ecommerce.demo.entity.UserRole;
+import com.ecommerce.demo.exception.ResourceNotFoundException;
 import com.ecommerce.demo.repository.UserRepository;
 
 @Service
@@ -60,5 +64,55 @@ public class UserService {
             newUser.setUserRole(UserRole.USER);
             return userRepository.save(newUser);
         }
+    }
+    @Transactional(readOnly = true)
+    public UserProfileDTO getUserProfile(Integer id) {
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+        return convertToProfileDTO(user);
+    }
+
+    @Transactional
+    public UserProfileDTO updateUser(Integer id, UserUpdateDTO updateDTO) {
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+
+        // Update only if values are provided
+        if (updateDTO.getFirstName() != null) {
+            user.setFirstName(updateDTO.getFirstName());
+        }
+        if (updateDTO.getLastName() != null) {
+            user.setLastName(updateDTO.getLastName());
+        }
+        if (updateDTO.getEmail() != null) {
+            validateEmail(updateDTO.getEmail(), id);
+            user.setEmail(updateDTO.getEmail());
+        }
+        if (updateDTO.getPhoneNumber() != null) {
+            user.setPhoneNumber(updateDTO.getPhoneNumber());
+        }
+
+        User savedUser = userRepository.save(user);
+        return convertToProfileDTO(savedUser);
+    }
+
+    private void validateEmail(String email, Integer userId) {
+        Optional<User> existingUser = userRepository.findByEmail(email);
+        if (existingUser.isPresent() && existingUser.get().getUserId() != userId) {
+            throw new IllegalArgumentException("Email already in use");
+        }
+    }
+
+    private UserProfileDTO convertToProfileDTO(User user) {
+        UserProfileDTO dto = new UserProfileDTO();
+        dto.setUserId(user.getUserId());
+        dto.setUsername(user.getUsername());
+        dto.setFirstName(user.getFirstName());
+        dto.setLastName(user.getLastName());
+        dto.setEmail(user.getEmail());
+        dto.setPhoneNumber(user.getPhoneNumber());
+        
+        dto.setCreatedAt(user.getCreatedAt());
+        return dto;
     }
 }
